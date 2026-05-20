@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'mood_checkin_screen.dart';
+import 'explore_screen.dart';
+import 'journal_screen.dart';
+import 'progress_screen.dart';
+import 'profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,6 +14,39 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+
+  final List<Widget> _screens = [
+    const HomeContent(),
+    const ExploreScreen(),
+    const JournalScreen(),
+    const ProgressScreen(),
+    const ProfileScreen(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _screens[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: (index) => setState(() => _selectedIndex = index),
+        selectedItemColor: const Color(0xFF7C5CBF),
+        unselectedItemColor: Colors.grey,
+        type: BottomNavigationBarType.fixed,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.explore), label: 'Explore'),
+          BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Journal'),
+          BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Progress'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        ],
+      ),
+    );
+  }
+}
+
+class HomeContent extends StatelessWidget {
+  const HomeContent({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -111,18 +148,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   Icons.self_improvement,
                   'Meditate',
                   const Color(0xFFEDE7F6),
+                  context,
                 ),
                 const SizedBox(width: 12),
                 _quickActionCard(
                   Icons.book,
                   'Journal',
                   const Color(0xFFEDE7F6),
+                  context,
                 ),
                 const SizedBox(width: 12),
                 _quickActionCard(
                   Icons.bar_chart,
                   'Progress',
                   const Color(0xFFEDE7F6),
+                  context,
                 ),
               ],
             ),
@@ -139,11 +179,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             const SizedBox(height: 12),
-            _sessionCard('Morning Calm', '5 min · Breathing', Icons.air),
+            _sessionCard('Morning Calm', '5 min · Breathing', Icons.air, context),
             const SizedBox(height: 10),
-            _sessionCard('Stress Relief', '10 min · Meditation', Icons.spa),
+            _sessionCard('Stress Relief', '10 min · Meditation', Icons.spa, context),
             const SizedBox(height: 10),
-            _sessionCard('Sleep Better', '15 min · Sleep', Icons.nightlight),
+            _sessionCard('Sleep Better', '15 min · Sleep', Icons.nightlight, context),
 
             const SizedBox(height: 24),
 
@@ -175,26 +215,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-
-      // Bottom Navigation Bar
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) => setState(() => _selectedIndex = index),
-        selectedItemColor: const Color(0xFF7C5CBF),
-        unselectedItemColor: Colors.grey,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.explore), label: 'Explore'),
-          BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Journal'),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Progress'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
-      ),
     );
   }
 
-  Widget _quickActionCard(IconData icon, String label, Color color) {
+  Widget _quickActionCard(
+      IconData icon, String label, Color color, BuildContext context) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -220,7 +245,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _sessionCard(String title, String subtitle, IconData icon) {
+  Widget _sessionCard(
+      String title, String subtitle, IconData icon, BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
